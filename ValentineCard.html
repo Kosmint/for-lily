@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+
+
+<head>
+
+
+
+    <meta charset="UTF-8">
+
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+    <title>My Love Lilija.</title>
+
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+
+
+    <link rel="stylesheet" href="StyleSheet1.css">
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+
+
+
+
+    <div class="container">
+
+
+
+        <div class="envelope-wrapper">
+
+
+
+            <div class="envelope" onclick="openEnvelope()">
+
+
+
+                <div class="flap"></div>
+
+
+
+                <div class="pocket"></div>
+
+
+
+
+
+
+
+                <div class="card-stack" id="main-stack">
+
+
+
+                    <div class="card" id="finale-card">
+
+                        <div class="content">
+
+                            <h1 class="handwritten" style="font-size: 2.5rem;">Happy Valentine's Day.</h1>
+                            <p style="font-size: 1.2rem; font-weight: bold;">I wanted to show how much I love you, Lily.</p>
+                            <br />
+                            <p>Even if this letter is not much, I hope it made your heart feel a little warmer</p>
+                            <br />
+                            <p>I love you, Lilija.</p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="card">
+
+                        <div class="content">
+
+                            <h1 class="handwritten">My feelings.</h1>
+
+                            <div class="reveal-container">
+
+                                <div class="hidden-message">
+
+                                    <p>You are the best thing that has ever happened to me, no words can express my true love that I feel towards you. Being with you, feels like like home, warm and cozy. I'm so thankful to you that even after everything that has happened, you stayed, taught, cared and loved a goofball like me, thank you..</p>
+                                </div>
+
+                                <div id="heart-cover"></div>
+
+                            </div>
+
+                            <p class="hint">My lovely dovely message for you bun bun (click da hearts to reveal)</p>
+
+                            <div class="next-heart" id="reveal-next-btn" style="opacity: 0; pointer-events: none;">❤️</div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="card">
+
+                        <div class="content">
+
+                            <h1 class="handwritten">Love Gambling</h1>
+
+                            <div class="slot-machine">
+
+                                <div class="reels">
+
+                                    <div class="reel-window">
+
+                                        <div class="reel-strip" id="reel1">
+
+                                            <div>❤️</div><div>💎</div><div>⭐</div><div>🍒</div><div>🍓</div><div>❤️</div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="reel-window">
+
+                                        <div class="reel-strip" id="reel2">
+
+                                            <div>🍒</div><div>❤️</div><div>💎</div><div>⭐</div><div>🍓</div><div>❤️</div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="reel-window">
+
+                                        <div class="reel-strip" id="reel3">
+
+                                            <div>⭐</div><div>🍒</div><div>🍓</div><div>❤️</div><div>💎</div><div>❤️</div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <button id="spin-button" onclick="spinSlots()">GAMBLEE!</button>
+
+                            </div>
+
+                            <p id="slot-message" class="game-hint">Me know you like gambling souu I made this for you ^^</p>
+
+                            <div class="next-heart" id="slot-next-btn" style="opacity: 0; pointer-events: none;">❤️</div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="card">
+
+
+
+                        <div class="content">
+
+
+
+                            <h1 class="handwritten">Our Memories</h1>
+
+
+
+
+
+
+
+                            <div class="carousel-container">
+
+
+
+                                <div class="heart-border">
+
+
+
+                                    <div class="carousel-slide">
+
+
+
+                                        <img src="Us.png" id="carousel-img" alt="Memory">
+
+
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+
+
+                                <button class="arrow left" onclick="changeSlide(-1)">&#10094;</button>
+
+
+
+                                <button class="arrow right" onclick="changeSlide(1)">&#10095;</button>
+
+
+
+                            </div>
+
+
+
+
+
+
+
+                            <p id="carousel-text" class="memory-caption">When we played that one christmas game, wishing for similiar house in future heh. </p>
+
+
+
+
+
+
+
+                            <div class="next-heart">❤️</div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="card">
+
+
+
+                        <div class="content">
+
+
+
+                            <h1 class="handwritten">My Heart...</h1>
+
+
+
+                            <p id="slider-text" style="font-weight: bold; min-height: 40px;">Our start of relationship wasn't the best at all. I'm sorry for making it like this.</p>
+
+
+
+
+
+
+
+                            <div class="heart-slider-track">
+
+
+
+                                <div id="display-heart">💔</div>
+
+
+
+                                <input type="range" min="1" max="100" value="1" id="heart-slider" oninput="moveHeartSlider(this.value)">
+
+
+
+                            </div>
+
+
+
+
+
+
+
+                            <p class="hint">Slide the heart across &rarr;</p>
+
+
+
+                            <div class="next-heart" id="final-next-btn" style="opacity: 0; pointer-events: none;">❤️</div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="card">
+
+
+
+                        <div class="content">
+
+
+
+                            <h1 class="handwritten">Love at first sight.</h1>
+
+
+
+                            <p>I fell in love with you for who you are, and I will keep falling in love with you every day, darling.</p>
+
+
+
+                            <p class="hint game-hint" id="challenge-text">Tap my heart for da love bunbun!!</p>
+
+
+
+                            <div class="next-heart" id="game-heart-trigger">❤️</div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="card">
+
+
+
+                        <div class="content">
+
+
+
+                            <h1 class="handwritten">My Dearest Lily,</h1>
+
+
+
+                            <p>I made this letter to show my love and feelings, enjoy :></p>
+
+
+
+                            <p class="hint">Click the heart to see more</p>
+
+
+
+                            <div class="next-heart">❤️</div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                </div> <div class="heart-seal">♥</div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div id="big-heart-boom">❤️</div>
+
+
+
+
+
+
+
+    <script src="JavaScript.js"></script>
+
+
+
+
+
+
+
+    <audio id="snd-open" src="impact_paper_bag_drop.mp3"></audio>
+
+    <audio id="snd-swipe" src="zapsplat_household_book_sketch_pad_craft_paper_page_turn_swipe_finger_003_86208.mp3"></audio>
+
+    <audio id="snd-pop" src="zapsplat_cartoon_pop_bubble_etc_006_77429.mp3"></audio>
+
+    <audio id="snd-slot" src="zapsplat_cartoon_pop_bubble_etc_005_77428.mp3" loop></audio> ```
+    <audio id="snd-click" src="zapsplat_cartoon_pop_bubble_high_pitched_short_fast_80361.mp3"></audio>
+    <audio id="snd-win" src="universfield-level-up-05-326133.mp3"></audio>\
+    <audio id="snd-lose" src="lesiakower-error-mistake-sound-effect-incorrect-answer-437420.mp3"></audio>
+    <audio id="snd-finale" src="zapsplat_sound_design_whoosh_magical_wind_chimes_004_92999.mp3"></audio>
+    <audio id="bg-music" loop src="Still-Awake-Lofi-Study-Music(chosic.com).mp3"></audio>
+</body>
+
+
+
+</html>
+

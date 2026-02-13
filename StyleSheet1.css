@@ -1,0 +1,869 @@
+﻿:root {
+    --bg-color: #ffe8f0;
+    --envelope-main: #ff8fa3;
+    --envelope-flap: #ff758f;
+    --seal-color: #c9184a;
+}
+
+
+
+
+body {
+    background: var(--bg-color);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* This handles the vertical centering */
+
+
+
+    font-family: 'Quicksand', sans-serif;
+    overflow: hidden;
+}
+
+
+
+.container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+.envelope-wrapper {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+    /* Dim the envelope when the card is active */
+
+
+
+    .envelope-wrapper.open .envelope {
+        opacity: 0.6; /* Makes the envelope look "left behind" */
+    }
+
+
+
+
+
+.envelope {
+    position: relative;
+    width: 450px;
+    height: 300px;
+    background-color: var(--envelope-main);
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: opacity 0.8s ease;
+}
+
+
+
+.flap {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 225px solid transparent;
+    border-right: 225px solid transparent;
+    border-top: 180px solid var(--envelope-flap);
+    transform-origin: top;
+    transition: transform 0.6s ease;
+    z-index: 10;
+}
+
+
+
+.pocket {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 225px solid #ffb3c1;
+    border-right: 225px solid #ffb3c1;
+    border-bottom: 160px solid #ff99ac;
+    z-index: 5;
+    border-radius: 0 0 15px 15px;
+}
+
+
+
+/* --- THE BIG CARD LOGIC --- */
+
+
+
+.card-stack {
+    position: absolute;
+    bottom: 0;
+    left: 25px;
+    width: 400px;
+    height: 250px;
+    z-index: 1;
+    transform: translateY(0) scale(1); /* Start at normal position */
+
+
+
+    opacity: 0; /* ADD THIS: Keeps everything hidden initially */
+
+
+
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+    pointer-events: none; /* Prevents clicking through the envelope before it's open */
+
+
+
+    bottom: 20px; /* Increase this slightly to "tuck" the cards higher into the pocket */
+}
+
+
+
+.envelope-wrapper.open .card-stack {
+   
+
+    transform: translateY(-135px) scale(1.3);
+    opacity: 1;
+    z-index: 20;
+    pointer-events: auto;
+}
+
+
+
+.card p {
+    font-size: 0.9rem;
+    margin: 5px 0;
+    line-height: 1.2;
+}
+
+
+
+.card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+   
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  
+
+    padding: 10px 15px;
+    box-sizing: border-box;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.6s ease, opacity 0.5s;
+    overflow: visible;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+
+
+
+
+    /* ONLY the card with the 'active' class will be visible */
+
+
+
+    .card.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+
+
+
+
+
+/* Photo Styling */
+
+
+
+.photo-frame {
+    width: 85%; /* Slightly smaller width for better margins */
+
+
+
+    max-height: 120px; /* Limits how much vertical space the photo takes */
+
+
+
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #eee;
+    margin: 10px 0; /* Adds a little space above and below the photo */
+
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+    .photo-frame img {
+        max-width: 100%;
+        max-height: 110px; /* Forces the image to stay small enough for text */
+
+
+
+        object-fit: contain; /* Ensures the whole photo is visible without cropping */
+
+
+
+        display: block;
+    }
+
+
+
+
+.next-heart {
+    font-size: 1.8rem; /* Slightly smaller to save space */
+
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.5s ease;
+    opacity: 0;
+    pointer-events: none;
+   
+
+    margin-top: -10px;
+    position: relative;
+    z-index: 30;
+}
+
+
+
+
+
+
+
+.envelope-wrapper.open .next-heart {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.1s; /* This makes the heart fade in AFTER the card grows */
+}
+
+
+
+
+.next-heart:hover {
+    transform: scale(1.2);
+}
+
+
+
+
+/* Swipe Logic (Keep the scale 1.6 while swiping) */
+
+
+
+.card.swiped {
+    transform: translateX(-180%) rotate(-20deg) scale(1.6);
+    opacity: 0;
+}
+
+
+
+
+/* Other Styles */
+
+
+
+.envelope-wrapper.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+
+
+
+.envelope-wrapper.open .heart-seal {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+
+.handwritten {
+    font-family: 'Dancing Script', cursive;
+    color: var(--seal-color);
+    font-size: 1.6rem; /* Slightly smaller to save space */
+
+
+
+    margin: 0;
+}
+
+
+
+.hint {
+    color: #999;
+    font-size: 0.6rem;
+    margin: 0;
+}
+
+
+
+
+.heart-seal {
+    position: absolute;
+    top: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 30px;
+    z-index: 11;
+    transition: 0.3s;
+}
+
+
+/* Shake animation for the challenge */
+
+
+
+@keyframes heartShake {
+
+
+
+    0% {
+        transform: scale(1.2);
+    }
+
+
+
+    25% {
+        transform: scale(1.3) rotate(5deg);
+    }
+
+
+
+    50% {
+        transform: scale(1.3) rotate(-5deg);
+    }
+
+
+
+    75% {
+        transform: scale(1.3) rotate(5deg);
+    }
+
+
+
+
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+
+
+.shake {
+    animation: heartShake 0.3s ease-in-out;
+}
+
+
+
+/* Big Heart Explosion Overlay */
+
+
+
+#big-heart-boom {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 500px;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+}
+
+
+
+
+    #big-heart-boom.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
+
+
+/* Styling for the game messages */
+
+
+
+.game-hint {
+    color: #c9184a !important;
+    font-weight: bold;
+    font-size: 0.8rem !important;
+}
+
+
+
+/* --- Slider Game Styles --- */
+
+
+
+.heart-slider-track {
+    position: relative;
+    width: 85%;
+    margin: 20px auto;
+    height: 70px;
+    background: rgba(255, 182, 193, 0.3);
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    /* ADD THIS: Padding prevents the heart from touching the absolute edges */
+    padding: 0 10px;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+
+#display-heart {
+    font-size: 3.5rem;
+    position: absolute;
+    /* Remove the old left/transform from CSS if they were hardcoded */
+    pointer-events: none;
+    z-index: 1;
+    /* Smooth transition for the scaling/glow effect */
+    transition: transform 0.1s ease-out, text-shadow 0.3s;
+}
+
+
+#heart-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    opacity: 0;
+    z-index: 5; /* This must be higher than the heart to be clickable */
+
+
+
+    margin: 0;
+}
+
+
+
+
+    #heart-slider:active {
+        cursor: grabbing;
+    }
+
+
+
+.healthy-glow {
+    text-shadow: 0 0 25px #ff758f;
+    transform: scale(1.1) translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+
+
+/* --- Carousel Styles --- */
+
+
+
+.carousel-container {
+    position: relative;
+    width: 200px;
+    height: 135px; /* Reduced from 160px */
+
+    margin: 2px auto; /* Tightened margins */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+.heart-border {
+    padding: 8px; /* Slightly smaller padding */
+
+
+
+    background: white;
+    border: 3px dashed #ff758f;
+    border-radius: 15px;
+    position: relative;
+}
+
+
+    /* Adding little hearts to the corners of the border */
+
+
+
+    .heart-border::before {
+        content: '❤️';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        font-size: 1.2rem;
+    }
+
+
+
+
+.carousel-slide img {
+    width: 170px; /* Slightly narrower */
+
+    height: 105px; /* Slightly shorter */
+
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+
+
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    color: #ff758f;
+    font-weight: bold;
+    z-index: 10;
+}
+
+
+
+
+    .arrow.left {
+        left: -40px;
+    }
+
+
+    .arrow.right {
+        right: -40px;
+    }
+
+
+
+
+.memory-caption {
+    font-size: 0.85rem; /* Slightly smaller font */
+
+
+
+    line-height: 1.2;
+    margin-top: 8px;
+    padding: 0 10px;
+}
+
+
+
+.card h1.handwritten {
+    margin-top: 10px; /* Pulls title down from the very top */
+
+
+
+    margin-bottom: 5px;
+    padding-top: 5px;
+}
+
+
+
+.slot-machine {
+    background: #fff0f3;
+    border: 3px solid var(--envelope-flap);
+    border-radius: 15px;
+    padding: 10px;
+    margin: 5px 0;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+
+
+
+.reels {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+
+
+.reel {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border: 2px solid #ffb3c1;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+
+
+/* The spinning blur effect */
+
+.spinning {
+    filter: blur(4px);
+    transform: scale(0.9);
+}
+
+
+
+#spin-button {
+    background-color: var(--envelope-flap);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+
+    #spin-button:hover {
+        background-color: var(--seal-color);
+    }
+
+
+
+    #spin-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+.reel-window {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border: 2px solid #ffb3c1;
+    border-radius: 10px;
+    overflow: hidden; /* This hides the emojis not in view */
+
+    position: relative;
+}
+
+.reel-strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* This handles the smooth spinning motion */
+
+    transition: transform 2s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    display: flex;
+    flex-direction: column;
+}
+
+    .reel-strip div {
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+    }
+
+.reveal-container {
+    position: relative;
+    width: 90%;
+    height: 140px;
+    background: #fff0f3;
+    border-radius: 15px;
+    margin: 10px auto;
+    overflow: hidden;
+    border: 2px dashed #ffb3c1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.hidden-message {
+    padding: 20px;
+    font-size: 1.1rem;
+    color: var(--seal-color);
+    font-weight: bold;
+    z-index: 1;
+    text-align: center;
+}
+
+
+
+#heart-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: transparent; /* CHANGE: From 'white' to 'transparent' */
+}
+
+
+
+.covering-heart {
+    position: absolute;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    user-select: none;
+}
+
+
+
+    .covering-heart:hover {
+        transform: scale(1.2);
+    }
+
+
+
+    .covering-heart.removed {
+        transform: scale(0);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+/* --- SPARKLE ANIMATION --- */
+
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ffb3c1;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10;
+    /* This makes the particles fly outward and fade */
+
+    animation: explode 0.6s ease-out forwards;
+}
+
+
+
+@keyframes explode {
+
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+
+
+    100% {
+        /* This moves particles in random directions using CSS*/
+
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+
+
+.confetti {
+    position: fixed;
+    width: 15px;
+    height: 15px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: fall linear forwards;
+}
+
+
+
+@keyframes fall {
+
+    to {
+        transform: translateY(100vh) rotate(360deg);
+    }
+}
+
+.arrow:active {
+    transform: translateY(-50%) scale(0.9); /* Shrinks slightly when pressed */
+    filter: brightness(0.9);
+}
+
+
+/* 1. Romantic Background Pulse */
+body.finale-active {
+    background: radial-gradient(circle, #fff0f3 0%, #ffc1cf 100%);
+    animation: romanticPulse 4s infinite alternate;
+    transition: background 2s ease;
+}
+
+@keyframes romanticPulse {
+    from {
+        filter: brightness(1);
+    }
+
+    to {
+        filter: brightness(1.1) saturate(1.2);
+    }
+}
+
+/* 2. Floating Hearts Animation */
+.floating-heart-effect {
+    position: fixed;
+    bottom: -50px;
+    font-size: 24px;
+    user-select: none;
+    pointer-events: none;
+    z-index: 100;
+    animation: floatUp 6s linear forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 3. Make the Finale Text Glow */
+#finale-card h1 {
+    text-shadow: 0 0 10px rgba(201, 24, 74, 0.3);
+    animation: textGlow 2s infinite alternate;
+}
+
+@keyframes textGlow {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+        text-shadow: 0 0 20px rgba(201, 24, 74, 0.5);
+    }
+}
